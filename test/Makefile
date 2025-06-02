@@ -5,7 +5,7 @@
 SIM ?= icarus
 TOPLEVEL_LANG ?= verilog
 SRC_DIR = $(PWD)/../src
-PROJECT_SOURCES = ALU.v clk_div.v config.jason prefixAdd.v project.v shift_left.v shift_right.v sumador_condicional_prefix.v tt_um_top.v
+PROJECT_SOURCES = ALU.v clk_div.v config.jason prefixAdd.v shift_left.v shift_right.v sumador_condicional_prefix.v tt_um_top.v
 
 ifneq ($(GATES),yes)
 
