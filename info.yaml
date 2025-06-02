@@ -1,54 +1,44 @@
 # Tiny Tapeout project information
 project:
-  title:        ""      ALU control
-  author:       ""      Rodrigo Us
-  discord:      ""      # Your discord username, for communication and automatically assigning you a Tapeout role (optional)
-  description:  ""      # One line description of what your project does
-  language:     "Verilog" # other examples include SystemVerilog, Amaranth, VHDL, etc
-  clock_hz:     100000000       # Clock frequency in Hz (or 0 if not applicable)
+  title:        "ALU control"
+  author:       "Rodrigo Us"
+  discord:      ""      # Opcional
+  description:  "ALU de 4 bits con operaciones básicas y salidas de estado"
+  language:     "Verilog"
+  clock_hz:     0       # No se usa reloj
 
-  # How many tiles your design occupies? A single tile is about 167x108 uM.
-  tiles: "1x1"          # Valid values: 1x1, 1x2, 2x2, 3x2, 4x2, 6x2 or 8x2
+  tiles: "1x1"
 
-  # Your top module name must start with "tt_um_". Make it unique by including your github username:
   top_module:  "tt_um_top"
 
-  # List your project's source files here.
-  # Source files must be in ./src and you must list each source file separately, one per line.
-  # Don't forget to also update `PROJECT_SOURCES` in test/Makefile.
   source_files:
     - "ALU.v"
-    - "clk_div.v"
-    - "config.json"
     - "prefixAdd.v"
-    - "project.v"
     - "shift_left.v"
     - "shift_right.v"
     - "sumador_condicional_prefix.v"
+    - "tt_um_top.v"
 
-
-# The pinout of your project. Leave unused pins blank. DO NOT delete or add any pins.
-# This section is for the datasheet/website. Use descriptive names (e.g., RX, TX, MOSI, SCL, SEG_A, etc.).
 pinout:
   # Inputs
-  ui[0]: "sw0"
-  ui[1]: "sw1"
-  ui[2]: "sw2"
-  ui[3]: "sw3"
-  ui[4]: "sw4"
-  ui[5]: "sw5"
-  ui[6]: "sw6"
-  ui[7]: "sw7"
+  ui[0]: "A0"
+  ui[1]: "A1"
+  ui[2]: "A2"
+  ui[3]: "A3"
+  ui[4]: "B0"
+  ui[5]: "B1"
+  ui[6]: "B2"
+  ui[7]: "B3"
 
   # Outputs
-  uo[0]: "led0"
-  uo[1]: "led1"
-  uo[2]: "led2"
-  uo[3]: "led3"
-  uo[4]: "led4"
-  uo[5]: "led5"
-  uo[6]: "led6"
-  uo[7]: "led7"
+  uo[0]: "R0"
+  uo[1]: "R1"
+  uo[2]: "R2"
+  uo[3]: "R3"
+  uo[4]: "Zero"
+  uo[5]: "Negative"
+  uo[6]: "Carry"
+  uo[7]: "Overflow"
 
   # Bidirectional pins
   uio[0]: ""
