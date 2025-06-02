@@ -3,42 +3,38 @@ project:
   title:        "ALU control"
   author:       "Rodrigo Us"
   discord:      ""      # Opcional
-  description:  "ALU de 4 bits con operaciones básicas y salidas de estado"
+  description:  "ALU de 8 bits en Verilog sin submódulos"
   language:     "Verilog"
-  clock_hz:     0       # No se usa reloj
+  clock_hz:     100000000
 
   tiles: "1x1"
 
   top_module:  "tt_um_top"
 
   source_files:
-    - "ALU.v"
-    - "prefixAdd.v"
-    - "shift_left.v"
-    - "shift_right.v"
-    - "sumador_condicional_prefix.v"
+    - "ALU_simple.v"
     - "tt_um_top.v"
 
 pinout:
   # Inputs
-  ui[0]: "A0"
-  ui[1]: "A1"
-  ui[2]: "A2"
-  ui[3]: "A3"
-  ui[4]: "B0"
-  ui[5]: "B1"
-  ui[6]: "B2"
-  ui[7]: "B3"
+  ui[0]: "ALU_ctrl_bit0"
+  ui[1]: "ALU_ctrl_bit1"
+  ui[2]: "ALU_ctrl_bit2"
+  ui[3]: "A_bit3"
+  ui[4]: "A_bit4"
+  ui[5]: "A_bit5"
+  ui[6]: "A_bit6"
+  ui[7]: "A_bit7"
 
   # Outputs
-  uo[0]: "R0"
-  uo[1]: "R1"
-  uo[2]: "R2"
-  uo[3]: "R3"
-  uo[4]: "Zero"
-  uo[5]: "Negative"
-  uo[6]: "Carry"
-  uo[7]: "Overflow"
+  uo[0]: "Result_bit0"
+  uo[1]: "Result_bit1"
+  uo[2]: "Result_bit2"
+  uo[3]: "Result_bit3"
+  uo[4]: "Result_bit4"
+  uo[5]: "Result_bit5"
+  uo[6]: "Result_bit6"
+  uo[7]: "Result_bit7"
 
   # Bidirectional pins
   uio[0]: ""
@@ -50,5 +46,4 @@ pinout:
   uio[6]: ""
   uio[7]: ""
 
-# Do not change!
 yaml_version: 6
