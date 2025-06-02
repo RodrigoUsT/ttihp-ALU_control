@@ -1,50 +1,67 @@
-module ALU (
-    input [7:0] A,
-    input [7:0] B,
-    input [1:0] shiftdesp,
-    input [2:0] ALUControl,
-    output reg [7:0] Result,
-    output Zero,
-    output Negative,
-    output Carry,
-    output Overflow
+`timescale 1ns / 1ps
+
+module ALU_simple (
+    input  wire [7:0] A,
+    input  wire [7:0] B,
+    input  wire [1:0] shiftdesp,
+    input  wire [2:0] ALUControl, // 000: suma, 001: resta, 010: AND, 011: OR, 100: <<, 101: >>
+    output reg  [7:0] Result,
+    output wire       Zero,
+    output wire       Negative,
+    output reg        Carry,
+    output reg        Overflow
 );
-    wire [7:0] res_sum, res_shl, res_shr, res_and, res_or;
-    wire c_out, ovf;
-    wire isSub;
+    wire [7:0] B_inv = ~B;
+    wire [7:0] B_mux = (ALUControl == 3'b001) ? B_inv : B;
+    wire       cin   = (ALUControl == 3'b001); // 1 para resta
+    wire [8:0] sum_result = {1'b0, A} + {1'b0, B_mux} + cin;
 
-    assign isSub = (ALUControl == 3'b001);
-
-    sumador_condicional_prefix u_sum (
-        .A(A),
-        .B(B),
-        .isSub(isSub),
-        .S(res_sum),
-        .Cout(c_out),
-        .V(ovf)
-    );
-
-    shift_left u_shl (.A(A), .desp(shiftdesp), .Result(res_shl));
-    shift_right u_shr (.A(A), .desp(shiftdesp), .Result(res_shr));
-
-    assign res_and = A & B;
-    assign res_or = A | B;
+    wire [7:0] and_result = A & B;
+    wire [7:0] or_result  = A | B;
+    wire [7:0] shl_result = A << shiftdesp;
+    wire [7:0] shr_result = A >> shiftdesp;
 
     always @(*) begin
         case (ALUControl)
-            3'b000: Result = res_sum;
-            3'b001: Result = res_sum;
-            3'b010: Result = res_and;
-            3'b011: Result = res_or;
-            3'b100: Result = res_shl;
-            3'b101: Result = res_shr;
-            default: Result = 8'b0;
+            3'b000: begin // suma
+                Result   = sum_result[7:0];
+                Carry    = sum_result[8];
+                Overflow = (A[7] == B[7]) && (Result[7] != A[7]);
+            end
+            3'b001: begin // resta
+                Result   = sum_result[7:0];
+                Carry    = ~sum_result[8]; // borrow
+                Overflow = (A[7] != B[7]) && (Result[7] != A[7]);
+            end
+            3'b010: begin // AND
+                Result   = and_result;
+                Carry    = 1'b0;
+                Overflow = 1'b0;
+            end
+            3'b011: begin // OR
+                Result   = or_result;
+                Carry    = 1'b0;
+                Overflow = 1'b0;
+            end
+            3'b100: begin // shift left
+                Result   = shl_result;
+                Carry    = A[7 - shiftdesp];
+                Overflow = 1'b0;
+            end
+            3'b101: begin // shift right
+                Result   = shr_result;
+                Carry    = A[shiftdesp - 1];
+                Overflow = 1'b0;
+            end
+            default: begin
+                Result   = 8'b0;
+                Carry    = 1'b0;
+                Overflow = 1'b0;
+            end
         endcase
     end
 
-    assign Zero = (Result == 8'b0);
+    assign Zero     = (Result == 8'b0);
     assign Negative = Result[7];
-    assign Carry = (ALUControl == 3'b000 || ALUControl == 3'b001) ? c_out : 1'b0;
-    assign Overflow = (ALUControl == 3'b000 || ALUControl == 3'b001) ? ovf : 1'b0;
-endmodule
 
+endmodule
